@@ -10,6 +10,7 @@ interface Options {
   autoReadTsConfig?: boolean;
   aliases?: Record<string, string>;
   allowedImports?: Array<{ from: string; to: string }>;
+  allowCrossSlice?: string[];
 }
 
 export const layersRule: Rule.RuleModule = {
@@ -44,6 +45,10 @@ export const layersRule: Rule.RuleModule = {
               additionalProperties: false,
             },
           },
+          allowCrossSlice: {
+            type: "array",
+            items: { type: "string" },
+          },
         },
         required: ["layers"],
         additionalProperties: false,
@@ -58,7 +63,7 @@ export const layersRule: Rule.RuleModule = {
   },
   create(context) {
     const options: Options = context.options[0] || { layers: [] };
-    const { layers, allowedImports = [] } = options;
+    const { layers, allowedImports = [], allowCrossSlice = [] } = options;
 
     let aliases: Record<string, string> = options.aliases ?? {};
     if (options.autoReadTsConfig) {
@@ -122,7 +127,8 @@ export const layersRule: Rule.RuleModule = {
         fromInfo.layer === toInfo.layer &&
         fromInfo.slice !== null &&
         toInfo.slice !== null &&
-        fromInfo.slice !== toInfo.slice
+        fromInfo.slice !== toInfo.slice &&
+        !allowCrossSlice.includes(fromInfo.layer)
       ) {
         context.report({
           node,

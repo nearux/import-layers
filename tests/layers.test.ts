@@ -327,6 +327,75 @@ describe("layers rule — Windows paths", () => {
   });
 });
 
+describe("layers rule — allowCrossSlice", () => {
+  ruleTester.run("layers-cross-slice", layersRule, {
+    valid: [
+      // Cross-slice allowed for features layer
+      {
+        code: 'import { CartItem } from "@/features/cart";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowCrossSlice: ["features"],
+          },
+        ],
+      },
+      // Cross-slice allowed for multiple layers
+      {
+        code: 'import { UserEntity } from "@/domains/order";',
+        filename: "src/domains/user/index.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowCrossSlice: ["domains", "features"],
+          },
+        ],
+      },
+    ],
+    invalid: [
+      // Cross-slice NOT allowed for unlisted layer
+      {
+        code: 'import { CartItem } from "@/features/cart";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowCrossSlice: ["shared"],
+          },
+        ],
+        errors: [
+          {
+            message:
+              "Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.",
+          },
+        ],
+      },
+      // Upper layer violation still enforced even with allowCrossSlice
+      {
+        code: 'import { UserEntity } from "@/domains/user";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowCrossSlice: ["features"],
+          },
+        ],
+        errors: [
+          {
+            message:
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
+          },
+        ],
+      },
+    ],
+  });
+});
+
 describe("layers rule — autoReadTsConfig", () => {
   // RuleTester doesn't support setting cwd directly, so we verify
   // the option is accepted without error. The readTsConfigPaths function
