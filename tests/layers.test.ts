@@ -60,7 +60,7 @@ describe("layers rule", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -72,7 +72,7 @@ describe("layers rule", () => {
         errors: [
           {
             message:
-              "'features' 레이어 내에서 'auth'가 'cart'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -84,7 +84,7 @@ describe("layers rule", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -96,7 +96,7 @@ describe("layers rule", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -153,7 +153,7 @@ describe("layers rule — allowedImports", () => {
         errors: [
           {
             message:
-              "'features' 레이어 내에서 'auth'가 'cart'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -190,7 +190,7 @@ describe("layers rule — alias variants", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -223,7 +223,7 @@ describe("layers rule — dynamic import & require", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -235,7 +235,7 @@ describe("layers rule — dynamic import & require", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -247,7 +247,7 @@ describe("layers rule — dynamic import & require", () => {
         errors: [
           {
             message:
-              "'features' 레이어 내에서 'auth'가 'cart'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },
@@ -274,7 +274,7 @@ describe("layers rule — Windows paths", () => {
         errors: [
           {
             message:
-              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+              "'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
           },
         ],
       },

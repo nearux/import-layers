@@ -50,9 +50,9 @@ export const layersRule: Rule.RuleModule = {
     ],
     messages: {
       upperLayer:
-        "'{{fromLayer}}'에서 상위 레이어 '{{toLayer}}'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+        "'{{fromLayer}}' cannot import from upper layer '{{toLayer}}'. If this dependency is unavoidable, add an exception to allowedImports.",
       crossSlice:
-        "'{{layer}}' 레이어 내에서 '{{fromSlice}}'가 '{{toSlice}}'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+        "Within '{{layer}}' layer, '{{fromSlice}}' cannot import from '{{toSlice}}'. If this dependency is unavoidable, add an exception to allowedImports.",
     },
   },
   create(context) {
