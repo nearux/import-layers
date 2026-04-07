@@ -2,7 +2,14 @@
   "name": "eslint-plugin-import-layers",
   "version": "0.0.1",
   "description": "Enforce layer-based import direction with minimal config",
-  "keywords": ["eslint", "eslintplugin", "eslint-plugin", "layers", "fsd", "architecture"],
+  "keywords": [
+    "eslint",
+    "eslintplugin",
+    "eslint-plugin",
+    "layers",
+    "fsd",
+    "architecture"
+  ],
   "license": "MIT",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -13,7 +20,9 @@
       "require": "./dist/index.js"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "test": "vitest run",
@@ -24,6 +33,7 @@
     "eslint": ">=8.0.0"
   },
   "devDependencies": {
+    "@types/node": "^25.5.2",
     "eslint": "^9.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
