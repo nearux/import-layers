@@ -255,6 +255,51 @@ describe("layers rule — dynamic import & require", () => {
   });
 });
 
+describe("layers rule — relative path imports", () => {
+  ruleTester.run("layers-relative", layersRule, {
+    valid: [
+      // Relative import within same slice — allowed
+      {
+        code: 'import { validate } from "./utils";',
+        filename: "/project/src/features/auth/Login.ts",
+        options: defaultOptions,
+      },
+      // Relative import to lower layer — allowed
+      {
+        code: 'import { Button } from "../../shared/ui";',
+        filename: "/project/src/features/auth/Login.ts",
+        options: defaultOptions,
+      },
+    ],
+    invalid: [
+      // Relative cross-slice import within same layer
+      {
+        code: 'import { CartItem } from "../cart";',
+        filename: "/project/src/features/auth/Login.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.",
+          },
+        ],
+      },
+      // Relative import to upper layer
+      {
+        code: 'import { UserEntity } from "../../domains/user";',
+        filename: "/project/src/shared/ui/Button.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "'shared' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.",
+          },
+        ],
+      },
+    ],
+  });
+});
+
 describe("layers rule — Windows paths", () => {
   ruleTester.run("layers-windows", layersRule, {
     valid: [

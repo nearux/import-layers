@@ -7,11 +7,6 @@ export function extractLayerInfo(
   filePath: string,
   layers: string[],
 ): LayerInfo | null {
-  // Skip relative paths
-  if (filePath.startsWith("./") || filePath.startsWith("../")) {
-    return null;
-  }
-
   // Normalize Windows backslashes to forward slashes
   const segments = filePath.replace(/\\/g, "/").split("/");
 

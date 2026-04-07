@@ -1,4 +1,5 @@
 // src/rules/layers.ts
+import path from "node:path";
 import type { Rule } from "eslint";
 import { resolveAlias } from "../utils/resolveAlias";
 import { extractLayerInfo } from "../utils/extractLayerInfo";
@@ -69,14 +70,16 @@ export const layersRule: Rule.RuleModule = {
       if (!source || typeof source.value !== "string") return;
 
       const importPath = source.value;
-
-      // Skip relative paths
-      if (importPath.startsWith(".")) return;
-
       const currentFilePath = context.filename ?? context.getFilename();
 
-      // Resolve alias for import target
-      const resolvedImport = resolveAlias(importPath, aliases);
+      let resolvedImport: string;
+      if (importPath.startsWith(".")) {
+        // Resolve relative path against current file's directory
+        resolvedImport = path.resolve(path.dirname(currentFilePath), importPath);
+      } else {
+        // Resolve alias for import target
+        resolvedImport = resolveAlias(importPath, aliases);
+      }
 
       // Extract layer info for both current file and import target
       const fromInfo = extractLayerInfo(currentFilePath, layers);
