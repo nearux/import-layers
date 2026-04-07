@@ -103,3 +103,97 @@ describe("layers rule", () => {
     ],
   });
 });
+
+describe("layers rule — allowedImports", () => {
+  ruleTester.run("layers-allowed", layersRule, {
+    valid: [
+      // Cross-slice allowed by exception
+      {
+        code: 'import { User } from "@/features/user";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowedImports: [
+              { from: "features/auth", to: "features/user" },
+            ],
+          },
+        ],
+      },
+      // Upper layer allowed by exception
+      {
+        code: 'import { UserEntity } from "@/domains/user";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowedImports: [
+              { from: "features/auth", to: "domains/user" },
+            ],
+          },
+        ],
+      },
+    ],
+    invalid: [
+      // Exception does not match — still a violation
+      {
+        code: 'import { CartItem } from "@/features/cart";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "@": "src" },
+            allowedImports: [
+              { from: "features/auth", to: "features/user" },
+            ],
+          },
+        ],
+        errors: [
+          {
+            message:
+              "'features' 레이어 내에서 'auth'가 'cart'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+    ],
+  });
+});
+
+describe("layers rule — alias variants", () => {
+  ruleTester.run("layers-alias", layersRule, {
+    valid: [
+      // Tilde alias
+      {
+        code: 'import { Button } from "~/shared/ui";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "~": "src" },
+          },
+        ],
+      },
+    ],
+    invalid: [
+      // Tilde alias — violation detected through alias resolution
+      {
+        code: 'import { UserEntity } from "~/domains/user";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            aliases: { "~": "src" },
+          },
+        ],
+        errors: [
+          {
+            message:
+              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+    ],
+  });
+});
