@@ -20,6 +20,9 @@
       "require": "./dist/index.js"
     }
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "files": [
     "dist"
   ],
@@ -33,7 +36,7 @@
     "eslint": ">=8.0.0"
   },
   "devDependencies": {
-    "@types/node": "^25.5.2",
+    "@types/node": "^18.19.130",
     "eslint": "^9.0.0",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
