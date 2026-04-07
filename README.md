@@ -63,7 +63,7 @@ export default [
 The `layers` array treats **earlier items as upper layers and later items as lower layers**.
 
 ```js
-layers: ["domains", "features", "shared"]
+layers: ["domains", "features", "shared"];
 // domains(0) > features(1) > shared(2)
 ```
 
@@ -91,6 +91,8 @@ import { CartItem } from "@/features/cart"; // in features/auth/...
 import { validate } from "./utils"; // in features/auth/...
 ```
 
+> **Note:** These rules apply to all import forms — `import`, `export ... from`, dynamic `import()`, and `require()`.
+
 ## Options
 
 ```ts
@@ -110,6 +112,10 @@ interface Options {
   // Import pairs to allow as exceptions to the rules.
   // @default []
   allowedImports?: Array<{ from: string; to: string }>;
+
+  // Layers where cross-slice imports are permitted.
+  // @default []
+  allowCrossSlice?: string[];
 }
 ```
 
@@ -124,6 +130,19 @@ interface Options {
     allowedImports: [
       { from: "features/auth", to: "features/user" },
     ],
+  },
+]
+```
+
+### Example: Allowing cross-slice imports for specific layers
+
+```js
+"import-layers/layers": [
+  "error",
+  {
+    layers: ["domains", "features", "shared"],
+    aliases: { "@": "src" },
+    allowCrossSlice: ["features"],
   },
 ]
 ```
@@ -145,13 +164,11 @@ interface Options {
 Errors include actionable guidance, not just violation notices.
 
 ```
-'features' cannot import from upper layer 'domains'.
-  If this dependency is unavoidable, add an exception to allowedImports.
+'features' cannot import from upper layer 'domains'. If this dependency is unavoidable, add an exception to allowedImports.
 ```
 
 ```
-Within the 'features' layer, 'auth' cannot import from 'cart'.
-  If this dependency is unavoidable, add an exception to allowedImports.
+Within 'features' layer, 'auth' cannot import from 'cart'. If this dependency is unavoidable, add an exception to allowedImports.
 ```
 
 ## License
