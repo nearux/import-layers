@@ -133,10 +133,34 @@ export const layersRule: Rule.RuleModule = {
       }
     }
 
+    function checkCallExpression(node: any) {
+      // Handle require("...") and import("...")
+      const { callee, arguments: args } = node;
+      if (!args || args.length === 0) return;
+
+      const isRequire =
+        callee.type === "Identifier" && callee.name === "require";
+      const isImport = callee.type === "Import" || node.type === "ImportExpression";
+
+      if (!isRequire && !isImport) return;
+
+      const arg = args?.[0] ?? node.source;
+      if (!arg || arg.type !== "Literal" || typeof arg.value !== "string") return;
+
+      // Reuse check logic by creating a fake node with source
+      check({ ...node, source: arg });
+    }
+
     return {
       ImportDeclaration: check,
       ExportNamedDeclaration: check,
       ExportAllDeclaration: check,
+      CallExpression: checkCallExpression,
+      ImportExpression(node: any) {
+        const source = node.source;
+        if (!source || source.type !== "Literal" || typeof source.value !== "string") return;
+        check({ ...node, source });
+      },
     };
   },
 };

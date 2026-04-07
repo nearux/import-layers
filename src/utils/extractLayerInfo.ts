@@ -12,7 +12,8 @@ export function extractLayerInfo(
     return null;
   }
 
-  const segments = filePath.split("/");
+  // Normalize Windows backslashes to forward slashes
+  const segments = filePath.replace(/\\/g, "/").split("/");
 
   // Find the first segment that matches a layer name
   const layerIndex = segments.findIndex((seg) => layers.includes(seg));

@@ -198,6 +198,90 @@ describe("layers rule — alias variants", () => {
   });
 });
 
+describe("layers rule — dynamic import & require", () => {
+  ruleTester.run("layers-dynamic", layersRule, {
+    valid: [
+      // Dynamic import to lower layer — allowed
+      {
+        code: 'async function load() { const mod = await import("@/shared/ui"); }',
+        filename: "src/features/auth/Login.ts",
+        options: defaultOptions,
+      },
+      // Require to lower layer — allowed
+      {
+        code: 'const mod = require("@/shared/ui");',
+        filename: "src/features/auth/Login.ts",
+        options: defaultOptions,
+      },
+    ],
+    invalid: [
+      // Dynamic import to upper layer — violation
+      {
+        code: 'async function load() { const mod = await import("@/domains/user"); }',
+        filename: "src/features/auth/Login.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+      // Require to upper layer — violation
+      {
+        code: 'const mod = require("@/domains/user");',
+        filename: "src/features/auth/Login.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+      // Dynamic import cross-slice — violation
+      {
+        code: 'async function load() { const mod = await import("@/features/cart"); }',
+        filename: "src/features/auth/Login.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "'features' 레이어 내에서 'auth'가 'cart'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+    ],
+  });
+});
+
+describe("layers rule — Windows paths", () => {
+  ruleTester.run("layers-windows", layersRule, {
+    valid: [
+      // Windows-style filename should still detect layer correctly
+      {
+        code: 'import { Button } from "@/shared/ui";',
+        filename: "C:\\Users\\dev\\project\\src\\features\\auth\\Login.ts",
+        options: defaultOptions,
+      },
+    ],
+    invalid: [
+      // Windows path — upper layer violation detected
+      {
+        code: 'import { UserEntity } from "@/domains/user";',
+        filename: "C:\\Users\\dev\\project\\src\\features\\auth\\Login.ts",
+        options: defaultOptions,
+        errors: [
+          {
+            message:
+              "'features'에서 상위 레이어 'domains'를 import할 수 없습니다. 불가피한 의존이라면 allowedImports에 예외를 추가하세요.",
+          },
+        ],
+      },
+    ],
+  });
+});
+
 describe("layers rule — autoReadTsConfig", () => {
   // RuleTester doesn't support setting cwd directly, so we verify
   // the option is accepted without error. The readTsConfigPaths function
