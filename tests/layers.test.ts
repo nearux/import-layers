@@ -197,3 +197,24 @@ describe("layers rule — alias variants", () => {
     ],
   });
 });
+
+describe("layers rule — autoReadTsConfig", () => {
+  // RuleTester doesn't support setting cwd directly, so we verify
+  // the option is accepted without error. The readTsConfigPaths function
+  // is already unit-tested in readTsConfig.test.ts.
+  ruleTester.run("layers-autoread", layersRule, {
+    valid: [
+      {
+        code: 'import { Button } from "./ui";',
+        filename: "src/features/auth/Login.ts",
+        options: [
+          {
+            layers: ["domains", "features", "shared"],
+            autoReadTsConfig: true,
+          },
+        ],
+      },
+    ],
+    invalid: [],
+  });
+});
