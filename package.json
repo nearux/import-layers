@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-import-layers",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Enforce layer-based import direction with minimal config",
   "keywords": [
     "eslint",
