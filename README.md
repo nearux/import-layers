@@ -142,7 +142,7 @@ interface Options {
   {
     layers: ["domains", "features", "shared"],
     aliases: { "@": "src" },
-    allowCrossSlice: ["features"],
+    allowCrossSlice: ["shared"],
   },
 ]
 ```
